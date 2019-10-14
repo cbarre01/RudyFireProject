@@ -96,7 +96,13 @@ getwd()
 
 
 #####PAIRS DATA######
-ThomasFirePairs1 <- read.csv("~/ThomasFirePairs2.csv")
+
+##SB ONLY##
+#ThomasFirePairs1 <- read.csv("~/ThomasFirePairs2.csv")
+
+
+##INCLUDE VENTURA##
+ThomasFirePairs1 <- read.csv("~/ThomasFireDataReducedIncludingSBVent.csv")
 
 
 ThomasFirePairs2 = ThomasFirePairs1[which(ThomasFirePairs1$Paired == 1),]
@@ -120,6 +126,11 @@ FenceTable = aggregate(ThomasFirePairs2[,21], list(ThomasFirePairs2$Fence), mean
 FenceTable$Group.1 = as.factor(FenceTable$Group.1)
 colnames(FenceTable) = c("Fence Type", "Prop Burned")
 
+FenceModel <- glm(Damage ~ Fence, data = ThomasFirePairs2, family = binomial(link = "logit"))
+
+FenceTable
+summary(FenceModel)
+
 #Topography Bar Chart
 length(unique(ThomasFirePairs3$Topography))
 dat <- data.frame(table(ThomasFirePairs3$Topography,ThomasFirePairs3$Damage))
@@ -132,6 +143,11 @@ ggplot(data=dat, aes(x=Topography, y=Count, fill=Damage)) + geom_bar(stat="ident
 TopographyTable = aggregate(ThomasFirePairs2[,21], list(ThomasFirePairs2$Topography), mean)
 TopographyTable$Group.1 = as.factor(TopographyTable$Group.1)
 colnames(TopographyTable) = c("Topography", "Prop Burned")
+
+TopographyModel <- glm(Damage ~ Topography, data = ThomasFirePairs2, family = binomial(link = "logit"))
+
+TopographyTable
+summary(TopographyModel)
 
 unique(ThomasFirePairs2$StructureT)
 #Structure Type Bar Chart
@@ -146,6 +162,11 @@ StructureTTable = aggregate(ThomasFirePairs2[,21], list(ThomasFirePairs2$Structu
 StructureTTable$Group.1 = as.factor(StructureTTable$Group.1)
 colnames(StructureTTable) = c("Structure Type", "Prop Burned")
 
+StructureTModel <- glm(Damage ~ StructureT, data = ThomasFirePairs2, family = binomial(link = "logit"))
+
+StructureTTable
+summary(StructureTModel)
+
 
 #Deck/Porch Bar Chart
 dat <- data.frame(table(ThomasFirePairs2$DeckPorch,ThomasFirePairs2$Damage))
@@ -159,4 +180,9 @@ ggplot(data=dat, aes(x=DeckPorch, y=Count, fill=Damage)) + geom_bar(stat="identi
 DeckPorchTable = aggregate(ThomasFirePairs2[,21], list(ThomasFirePairs2$DeckPorch), mean)
 DeckPorchTable$Group.1 = as.factor(DeckPorchTable$Group.1)
 colnames(DeckPorchTable) = c("Deck/Porch Type", "Prop Burned")
+
+DeckPorchModel <- glm(Damage ~ DeckPorch, data = ThomasFirePairs2, family = binomial(link = "logit"))
+
+DeckPorchTable
+summary(DeckPorchModel)
 
